@@ -1,0 +1,5 @@
+#-- coding:utf-8 --
+import requests
+if __name__ == "__main__":
+    rep=requests.get('https://www.weidai.com.cn', proxies={'https': 'https://219.223.251.173:3128'}, timeout=4)
+    print(rep.text)
