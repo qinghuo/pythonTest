@@ -9,11 +9,11 @@ class SendEmail:
  def __init__(self,fromAddr,password,toAddr):
     self.fromAddr=fromAddr
     self.password=password
-    # self.toAddr=toAddr
-    # self.smtpServer="smtp.163.com"
-    # self.smtpPort=465
-    # self.server = smtplib.SMTP_SSL(self.smtpServer,self.smtpPort)
-    # self.server.login(fromAddr, password)
+    self.toAddr=toAddr
+    self.smtpServer="smtp.163.com"
+    self.smtpPort=465
+    self.server = smtplib.SMTP_SSL(self.smtpServer,self.smtpPort)
+    self.server.login(fromAddr, password)
 
  def __formatAddr(self,s):
          name, addr = parseaddr(s)

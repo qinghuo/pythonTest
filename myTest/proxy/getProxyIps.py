@@ -6,7 +6,6 @@ import re
 import time
 import threading
 
-socket.setdefaulttimeout(1)
 headers = {
 "user-agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36",
 }
@@ -15,7 +14,7 @@ ipReg=r'((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2
 validIpList = []
 
 def getProxyIpList():
-    ipRep=requests.get('http://www.xicidaili.com/wn/',headers=headers);
+    ipRep=requests.get('http://www.xicidaili.com/nn/',headers=headers);
     tree = html.fromstring(ipRep.text)
     trs=tree.xpath('//tr')
     httpsResult = []
@@ -23,7 +22,11 @@ def getProxyIpList():
         ip=tr[1].text;
         if not re.match(ipReg,ip):
             continue
+        protocol=tr[5].text
+        if protocol!='HTTPS':
+            continue
         port=tr[2].text
+
         httpsResult.append('https://'+ip+':'+port)
     return httpsResult
 
@@ -40,7 +43,7 @@ def getValidIpList():
 
 def validIp(ip):
     try:
-        requests.get('https://www.weidai.com.cn', proxies={'https': ip}, timeout=4)
+        rep=requests.get('https://www.weidai.com.cn', proxies={'https': ip}, timeout=4,headers=headers)
     except Exception as e:
         print('fail ' + ip)
     else:
@@ -50,7 +53,8 @@ def validIp(ip):
 if __name__ == "__main__":
     print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     print(getValidIpList())
-    with open('./proxyIp.txt','w') as e:
+    with open('/Users/cengzhenmin/PycharmProjects/python/myTest/proxy/proxyIp.txt','w') as e:
+        e.truncate()
         for ip in validIpList:
             e.write(ip+'\n')
     print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))

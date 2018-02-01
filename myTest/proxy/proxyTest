@@ -1,5 +1,21 @@
 #-- coding:utf-8 --
 import requests
+import ssl
+#信任所有Https的安全证书
+if hasattr(ssl, '_create_unverified_context'):
+    ssl._create_default_https_context = ssl._create_unverified_context
+headers = {
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
+    "X-Requested-With":	"XMLHttpRequest",
+    "Content-Type":	"application/x-www-form-urlencoded",
+    "Origin":"https://www.weidai.com.cn"
+}
 if __name__ == "__main__":
-    rep=requests.get('https://www.weidai.com.cn', proxies={'https': 'https://219.223.251.173:3128'}, timeout=4)
-    print(rep.text)
+    s = requests.Session()
+    s.headers.update(headers)
+    # s.proxies ={'https': 'https://218.88.105.35:8888'}
+    reg1=s.get('https://www.weidai.com.cn',proxies={'https':'https://182.42.244.108:808'},headers=headers)
+    data = {'userName': '15268184807', 'password': r'Y91UgceaBQ//5tAGEAMgAyADAAMgAxADIANQA=eTO1mMGgGn','redirectURL':r'https://www.weidai.com.cn/static/fed/frontgw/fed.Index/index.html','loginCode':''}
+    # rep=s.get('https://www.weidai.com.cn',proxies={'https':'https://114.231.159.172:44916'},timeout=4)
+    rep=s.post('https://www.weidai.com.cn/login/v2/login?_api=login.loginIn&_mock=false&_stamp=1516848526116',data=data,timeout=10,proxies={'https':'https://182.42.244.108:808'})
+    print(rep)
